@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayantika 💖</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', cursive, sans-serif;
+        background: linear-gradient(to top, #ff9a9e, #fecfef);
+        background-attachment: fixed;
+        overflow-x: hidden;
+        text-align: center;
+        color: white;
+        padding-bottom: 80px;
+    }
+
+    #login-screen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: linear-gradient(to top, #ff9a9e, #fecfef);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #login-screen h2 {
+        font-size: 2.5rem;
+        text-shadow: 0 0 15px #ff4da6;
+        margin-bottom: 20px;
+    }
+
+    #login-screen input {
+        padding: 15px;
+        font-size: 1.2rem;
+        border-radius: 25px;
+        border: none;
+        text-align: center;
+        width: 200px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        color: #d81b60;
+        font-weight: bold;
+    }
+
+    #main-content {
+        display: none; 
+    }
+
+    .name {
+        font-size: 3.5rem;
+        margin-top: 20px;
+        animation: floatName 3s ease-in-out infinite;
+        text-shadow: 0 0 20px #ff4da6;
+    }
+
+    @keyframes floatName {
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .cloud {
+        position: absolute;
+        font-size: 40px;
+        animation: moveCloud 25s linear infinite;
+        z-index: -1;
+        opacity: 0.8;
+    }
+
+    @keyframes moveCloud {
+        from { left: -100px; }
+        to { left: 100vw; }
+    }
+
+    .message {
+        width: 85%;
+        max-width: 600px;
+        margin: 20px auto;
+        background: rgba(255,255,255,0.25);
+        padding: 30px;
+        border-radius: 20px;
+        line-height: 1.8;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        backdrop-filter: blur(5px);
+    }
+
+    .page {
+        display: none;
+        animation: fadeIn 0.5s;
+    }
+    .page.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 15px;
+        padding: 20px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .slot {
+        padding: 15px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+    .slot p {
+        margin: 0 0 10px 0;
+        font-weight: bold;
+        color: #d81b60;
+    }
+
+    input[type="file"] {
+        width: 100%;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+
+    img {
+        width: 140px;
+        height: 140px;
+        border-radius: 15px;
+        object-fit: cover;
+        display: none; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    audio {
+        width: 100%;
+        margin-top: 10px;
+        display: none; 
+    }
+
+    .clear-btn {
+        margin-top: 10px;
+        padding: 5px 10px;
+        background: #ff4da6;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        display: none;
+    }
+
+    textarea {
+        width: 85%;
+        max-width: 500px;
+        border-radius: 15px;
+        padding: 15px;
+        border: none;
+        font-size: 1rem;
+        font-family: inherit;
+        resize: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        margin-top: 10px;
+    }
+
+    .saved-note {
+        width: 85%;
+        max-width: 500px;
+        margin: 20px auto;
+        background: rgba(255,255,255,0.3);
+        padding: 15px;
+        border-radius: 15px;
+        white-space: pre-wrap;
+        font-style: italic;
+        color: #d81b60;
+    }
+
+    .heart-wrapper {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 100px auto;
+        animation: heartbeat 1s infinite alternate;
+    }
+
+    .heart-shape {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #ff0040;
+        transform: rotate(-45deg);
+        box-shadow: 0 0 30px rgba(255, 0, 64, 0.6);
+    }
+
+    .heart-shape::before, .heart-shape::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #ff0040;
+        border-radius: 50%;
+    }
+
+    .heart-shape::before { top: -50%; left: 0; }
+    .heart-shape::after { top: 0; left: 50%; }
+
+    .heart-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .heart-img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        display: none; 
+    }
+
+    .heart-content input {
+        width: 120px;
+        color: white;
+    }
+
+    @keyframes heartbeat {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.15); }
+    }
+
+    .btn {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 25px;
+        background: #ff4da6;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 20px auto;
+        box-shadow: 0 4px 10px rgba(255, 77, 166, 0.4);
+        transition: transform 0.2s;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 100;
+        flex-wrap: wrap; 
+    }
+
+    .nav-btn {
+        background: none;
+        border: none;
+        font-size: 0.95rem;
+        color: #ff4da6;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    .nav-btn.active {
+        color: #d81b60;
+        border-bottom: 3px solid #d81b60;
+    }
+
+    .fall {
+        position: fixed;
+        top: -10px;
+        font-size: 20px;
+        animation: fall 6s linear infinite;
+        z-index: -1;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div id="login-screen">
+    <h2>Only For You 💖</h2>
+    <input type="password" id="password" placeholder="Enter Magic Word...">
+    <button class="btn" onclick="checkPassword()">Unlock My Heart 🔓</button>
+</div>
+
+<audio id="bg-music" loop></audio>
+
+<div id="main-content">
+    <h1 class="name">AYANTIKA 💖</h1>
+
+    <div class="cloud" style="top:10%;">☁️</div>
+    <div class="cloud" style="top:30%; animation-delay:5s;">☁️</div>
+    <div class="cloud" style="top:50%; animation-delay:10s;">☁️</div>
+
+    <div id="page-home" class="page active">
+        <div class="message">
+            <p>
+                My dearest Ayantika ❤️<br><br>
+                Happy Birthday, my love...<br>
+                You are my happiness, my peace, my everything 💕<br>
+                Even in distance, my heart always finds you.<br>
+                I miss you, I love you, I choose you always.<br><br>
+                Forever yours ❤️
+            </p>
+        </div>
+
+        <div class="slot" style="margin: 20px auto; max-width: 300px;">
+            <p>🎵 Set Background Music</p>
+            <input type="file" id="bgMusicInput" accept="audio/*" onchange="loadBgMusic(event)">
+            <button id="clearBgMusicBtn" class="clear-btn" onclick="clearBgMusic()">Remove Music</button>
+        </div>
+
+        <button class="btn" onclick="loveMsg()">💌 Open Surprise</button>
+    </div>
+
+    <div id="page-gallery" class="page">
+        <h2>Our Memories 📸</h2>
+        <p style="font-size: 0.9rem;">(Upload your favorite pictures - Saved Automatically!)</p>
+        <div id="photoContainer" class="grid-container"></div>
+    </div>
+
+    <div id="page-voice" class="page">
+        <h2>Voice Notes 🎤</h2>
+        <p style="font-size: 0.9rem;">(Select voice messages for her to hear - Saved Automatically!)</p>
+        <div id="audioContainer" class="grid-container"></div>
+    </div>
+
+    <div id="page-messages" class="page">
+        <h2>Love Notes 📝</h2>
+        <p style="font-size: 0.9rem;">Write down your feelings and save them for her.</p>
+        <textarea id="myMessage" rows="5" placeholder="Dear Ayantika, I just wanted to say..."></textarea>
+        <br>
+        <button class="btn" onclick="saveMessage()">💾 Save Note</button>
+        <div id="savedMessageDisplay" class="saved-note">No notes saved yet.</div>
+    </div>
+
+    <div id="page-heart" class="page">
+        <h2>My Heart Belongs to You ❤️</h2>
+        <div class="heart-wrapper">
+            <div class="heart-shape"></div>
+            <div class="heart-content">
+                <input type="file" id="heartInput" accept="image/*" onchange="loadHeartImage(event)">
+                <img id="heartImage" class="heart-img">
+                <button id="clearHeartBtn" class="clear-btn" onclick="clearHeart()">Swap</button>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-btn active" onclick="switchPage('home', this)">🏠 Home</button>
+        <button class="nav-btn" onclick="switchPage('gallery', this)">📸 Photos</button>
+        <button class="nav-btn" onclick="switchPage('voice', this)">🎤 Voice</button>
+        <button class="nav-btn" onclick="switchPage('messages', this)">📝 Notes</button>
+        <button class="nav-btn" onclick="switchPage('heart', this)">❤️ Her</button>
+    </nav>
+</div>
+
+<script>
+    // --- 0. IndexedDB Helper Functions ---
+    const dbName = "AyantikaAppDB";
+    const storeName = "mediaStore";
+
+    function initDB() {
+        return new Promise((resolve, reject) => {
+            let request = indexedDB.open(dbName, 1);
+            request.onupgradeneeded = (e) => {
+                let db = e.target.result;
+                if (!db.objectStoreNames.contains(storeName)) {
+                    db.createObjectStore(storeName);
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(e.target.error);
+        });
+    }
+
+    async function setItemDB(key, value) {
+        const db = await initDB();
+        return new Promise((resolve, reject) => {
+            let tx = db.transaction(storeName, "readwrite");
+            tx.objectStore(storeName).put(value, key);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    }
+
+    async function getItemDB(key) {
+        const db = await initDB();
+        return new Promise((resolve, reject) => {
+            let tx = db.transaction(storeName, "readonly");
+            let req = tx.objectStore(storeName).get(key);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    async function removeItemDB(key) {
+        const db = await initDB();
+        return new Promise((resolve, reject) => {
+            let tx = db.transaction(storeName, "readwrite");
+            tx.objectStore(storeName).delete(key);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+    }
+
+    // --- 1. PASSWORD CHECK ---
+    function checkPassword() {
+        let pass = document.getElementById("password").value;
+        if (pass === "143") {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
+            let bgMusic = document.getElementById("bg-music");
+            if(bgMusic.src) {
+                bgMusic.play().catch(e => console.log("Audio play blocked", e));
+            }
+        } else {
+            alert("Oops! Wrong password! Hint: I Love You (in numbers) 😉");
+        }
+    }
+
+    // --- 2. BACKGROUND MUSIC LOAD/SAVE ---
+    async function loadBgMusic(e) {
+        let reader = new FileReader();
+        reader.onload = async function(ev) {
+            let base64 = ev.target.result;
+            document.getElementById("bg-music").src = base64;
+            document.getElementById("bg-music").play().catch(e => console.log(e));
+            document.getElementById("bgMusicInput").style.display = "none";
+            document.getElementById("clearBgMusicBtn").style.display = "block";
+            
+            try {
+                await setItemDB("ayantika_bg_music", base64);
+                alert("Background music saved successfully! 🎵");
+            } catch(err) {
+                alert("Error saving background music.");
+            }
+        }
+        if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+    }
+
+    async function clearBgMusic() {
+        await removeItemDB("ayantika_bg_music");
+        document.getElementById("bg-music").src = "";
+        document.getElementById("bg-music").pause();
+        document.getElementById("bgMusicInput").style.display = "block";
+        document.getElementById("bgMusicInput").value = "";
+        document.getElementById("clearBgMusicBtn").style.display = "none";
+    }
+
+    // --- 3. GENERATE SLOTS & FETCH SAVED DATA ON LOAD ---
+    window.onload = async function() {
+        const photoContainer = document.getElementById("photoContainer");
+        const audioContainer = document.getElementById("audioContainer");
+
+        // Generate 10 Picture Slots HTML
+        let photoHTML = "";
+        for(let i = 1; i <= 10; i++) {
+            photoHTML += `
+                <div class="slot" id="img_slot_${i}">
+                    <p>Picture ${i}</p>
+                    <input type="file" accept="image/*" onchange="loadImage(event, this, ${i})">
+                    <img src="" style="display:none">
+                    <button class="clear-btn" style="display:none" onclick="clearSlot(this, 'ayantika_img_${i}')">Swap</button>
+                </div>
+            `;
+        }
+        photoContainer.innerHTML = photoHTML;
+
+        // Generate 10 Voice Note Slots HTML
+        let audioHTML = "";
+        for(let i = 1; i <= 10; i++) {
+            audioHTML += `
+                <div class="slot" id="audio_slot_${i}">
+                    <p>Voice Note ${i}</p>
+                    <input type="file" accept="audio/*" onchange="loadAudio(event, this, ${i})">
+                    <audio controls src="" style="display:none"></audio>
+                    <button class="clear-btn" style="display:none" onclick="clearSlot(this, 'ayantika_audio_${i}')">Swap</button>
+                </div>
+            `;
+        }
+        audioContainer.innerHTML = audioHTML;
+
+        // Load Background Music
+        let savedBgMusic = await getItemDB("ayantika_bg_music");
+        if(savedBgMusic) {
+            document.getElementById("bg-music").src = savedBgMusic;
+            document.getElementById("bgMusicInput").style.display = "none";
+            document.getElementById("clearBgMusicBtn").style.display = "block";
+        }
+
+        // Load saved images from IndexedDB
+        for(let i = 1; i <= 10; i++) {
+            let savedImg = await getItemDB("ayantika_img_" + i);
+            if(savedImg) {
+                let slot = document.getElementById(`img_slot_${i}`);
+                slot.querySelector("input").style.display = "none";
+                slot.querySelector("img").src = savedImg;
+                slot.querySelector("img").style.display = "block";
+                slot.querySelector(".clear-btn").style.display = "block";
+            }
+        }
+
+        // Load saved audio from IndexedDB
+        for(let i = 1; i <= 10; i++) {
+            let savedAudio = await getItemDB("ayantika_audio_" + i);
+            if(savedAudio) {
+                let slot = document.getElementById(`audio_slot_${i}`);
+                slot.querySelector("input").style.display = "none";
+                slot.querySelector("audio").src = savedAudio;
+                slot.querySelector("audio").style.display = "block";
+                slot.querySelector(".clear-btn").style.display = "block";
+            }
+        }
+
+        // Load saved text message
+        let savedMsg = localStorage.getItem("ayantikaLoveNote");
+        if(savedMsg) {
+            document.getElementById("savedMessageDisplay").innerText = savedMsg;
+            document.getElementById("myMessage").value = savedMsg;
+        }
+
+        // Load saved heart image
+        let savedHeart = await getItemDB("ayantika_heart");
+        if(savedHeart) {
+            document.getElementById("heartImage").src = savedHeart;
+            document.getElementById("heartImage").style.display = "block";
+            document.getElementById("heartInput").style.display = "none";
+            document.getElementById("clearHeartBtn").style.display = "block";
+        }
+    };
+
+    // --- 4. SWITCH BETWEEN PAGES ---
+    function switchPage(pageId, btnElement) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('page-' + pageId).classList.add('active');
+        btnElement.classList.add('active');
+    }
+
+    // --- 5. LOAD AND SAVE IMAGES ---
+    function loadImage(e, inputElement, index) {
+        let reader = new FileReader();
+        reader.onload = async function(ev) {
+            let base64 = ev.target.result;
+            let parent = inputElement.parentElement;
+            parent.querySelector("img").src = base64;
+            parent.querySelector("img").style.display = "block"; 
+            parent.querySelector(".clear-btn").style.display = "block"; 
+            inputElement.style.display = "none"; 
+            
+            try {
+                await setItemDB("ayantika_img_" + index, base64);
+            } catch (err) {
+                alert("Unexpected error saving your picture.");
+            }
+        }
+        if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+    }
+
+    // --- 6. LOAD AND SAVE AUDIO ---
+    function loadAudio(e, inputElement, index) {
+        let reader = new FileReader();
+        reader.onload = async function(ev) {
+            let base64 = ev.target.result;
+            let parent = inputElement.parentElement;
+            parent.querySelector("audio").src = base64;
+            parent.querySelector("audio").style.display = "block"; 
+            parent.querySelector(".clear-btn").style.display = "block"; 
+            inputElement.style.display = "none"; 
+            
+            try {
+                await setItemDB("ayantika_audio_" + index, base64);
+            } catch (err) {
+                alert("Unexpected error saving your voice note.");
+            }
+        }
+        if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+    }
+
+    // --- 7. CLEAR SLOTS ---
+    async function clearSlot(btnElement, storageKey) {
+        await removeItemDB(storageKey);
+        let parent = btnElement.parentElement;
+        parent.querySelector("input[type='file']").style.display = "block";
+        parent.querySelector("input[type='file']").value = ""; 
+        
+        if (parent.querySelector("img")) {
+            parent.querySelector("img").style.display = "none";
+            parent.querySelector("img").src = "";
+        }
+        if (parent.querySelector("audio")) {
+            parent.querySelector("audio").style.display = "none";
+            parent.querySelector("audio").src = "";
+        }
+        btnElement.style.display = "none";
+    }
+
+    // --- 8. SAVE LOVE NOTE ---
+    function saveMessage() {
+        let msg = document.getElementById("myMessage").value;
+        if(msg.trim() === "") {
+            alert("Please write something before saving! 😊");
+            return;
+        }
+        localStorage.setItem("ayantikaLoveNote", msg);
+        document.getElementById("savedMessageDisplay").innerText = msg;
+        alert("Your note has been saved! 📝💖");
+    }
+
+    // --- 9. LOAD AND SAVE HEART IMAGE ---
+    function loadHeartImage(e) {
+        let reader = new FileReader();
+        reader.onload = async function(ev) {
+            let base64 = ev.target.result;
+            document.getElementById("heartImage").src = base64;
+            document.getElementById("heartImage").style.display = "block";
+            document.getElementById("heartInput").style.display = "none";
+            document.getElementById("clearHeartBtn").style.display = "block";
+            
+            try {
+                await setItemDB("ayantika_heart", base64);
+            } catch(err) {
+                console.log("Error saving heart image.");
+            }
+        }
+        if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+    }
+
+    async function clearHeart() {
+        await removeItemDB("ayantika_heart");
+        document.getElementById("heartImage").style.display = "none";
+        document.getElementById("heartInput").style.display = "block";
+        document.getElementById("heartInput").value = "";
+        document.getElementById("clearHeartBtn").style.display = "none";
+    }
+
+    // --- 10. LOVE ALERT ---
+    function loveMsg(){
+        alert("Ayantika, every moment with you is a beautiful surprise. I love you more than words can express! 💖 Forever & Always 😘");
+    }
+
+    // --- 11. 🌹 HEARTS + ROSES ANIMATION ---
+    setInterval(()=>{
+        let el = document.createElement("div");
+        el.classList.add("fall");
+        el.style.left = Math.random() * 100 + "vw";
+        el.innerHTML = Math.random() > 0.5 ? "💖" : "🌹";
+        document.body.appendChild(el);
+        
+        setTimeout(()=> el.remove(), 6000);
+    }, 300);
+</script>
+
+</body>
+</html>
